@@ -1,0 +1,105 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+rm(list = ls())
+```
+
+```{r}
+trees
+dim(trees)
+```
+
+Histograma
+```{r}
+hist(trees$Height, main = 'Arvores', xlab = 'altura', ylab = ' frequência', col = 'blue', density = 20, breaks = 20)
+```
+
+Densidade 
+```{r}
+densidade = density(trees$Height)
+plot(densidade, main = '')
+```
+
+
+Densidade sobre o Histograma
+```{r}
+hist(trees$Height, main = NULL, xlab = NULL, ylab = NULL, axes = FALSE)
+par(new=TRUE)
+plot(densidade, main = '')
+```
+
+
+Dispersão
+```{r}
+plot(trees$Girth, trees$Volume, main = "Arvores", xlab = 'volume', ylab = 'circunferência', col = 'blue', pch = 20)
+```
+
+Boxplot
+```{r}
+boxplot(trees$Volume, main = "Arvores", xlab = "volume", col = "gray", horizontal = TRUE, outline = F)
+```
+
+
+```{r}
+boxplot.stats(trees$Volume)
+```
+
+Agregação
+```{r}
+boxplot(trees)
+```
+
+
+Agregação
+```{r}
+InsectSprays
+Spray = aggregate(. ~spray, data=InsectSprays, sum)
+Spray
+```
+
+Gráfico de Barras 
+```{r}
+barplot(Spray$count, col = gray.colors(6), xlab = 'Spray', ylab = 'total', names.arg = Spray$Spray)
+box()
+```
+
+
+Gráfico de setor
+```{r}
+pie(Spray$count, Tabels = Spray$Spray, main = "Spray", col = c(1:6))
+legend("bottomright", legend = Spray$spray, cex = 1, fill = c(1:6))
+```
+
+
+
+
+
+```{r}
+library(stargazer)
+```
+
+
+```{r}
+stargazer(head(iris), out = 'resul.tex', type = 'text', summary = FALSE)
+```
+
+
+```{r}
+library(lattice)
+```
+
+
+Boxplot
+```{r}
+bwplot(trees$Volume, main = 'Arvores', xlab = 'Volume)
+```
+
+
+Histograma
+```{r}
+histogram(trees$Volume, main = 'Arvores', xlab = 'volume', aspect = 1, type = 'percent', nint = 5)
+```
+

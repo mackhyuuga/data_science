@@ -23,6 +23,14 @@ barplot(counts, main="Estados", xlab="Estados")
 #Gênero
 counts = table(dados$Genero)
 barplot(counts, main="Gêneros", xlab="Gêneros")
+counts
+table(dados$Genero)
+frequencia_matrix = matrix(table(dados$Genero))
+frequencia = table(dados$Genero)
+frequencia = frequencia*100/(frequencia[[1]] + frequencia[[2]] + frequencia[[3]] + frequencia[[4]] + frequencia[[5]])
+barplot(frequencia, main="Gêneros", xlab="Gêneros", ylab = 'frequency', )
+frequencia
+frequencia_matrix
 ```
 Explorar, colunas numéricas
 ```{r}
@@ -141,4 +149,5 @@ dados[dados$Salario >= 2 *desv  , ]$Salario = median(dados$Salario)
 #checamos se sairam os outliers
 dados[dados$Salario >= 2 *desv  , ]$Salario
 ```
+
 

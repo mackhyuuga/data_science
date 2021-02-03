@@ -1,0 +1,172 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+150 amostras, de zero a 1, com reposição, probabilidade equivalentes
+```{r}
+amostra = sample(c(0,1), 150, replace = TRUE, prob = c(0.7, 0.3))
+amostra
+summary(as.factor(amostra))
+```
+
+Gera a amostra de forma aleatória
+```{r}
+amostrairis = iris[amostra == 1,]
+amostrairis
+summary(amostrairis)
+dim(amostrairis)
+```
+
+Repetir o experimento
+```{r}
+set.seed(2345)  # esse comando permite gerar a mesma amostra aleatória vairas vezes
+sample(c(0, 1), 150, replace = TRUE, prob = c(0.5, 0.5))
+```
+
+
+```{r}
+library('sampling') # permite gerarmos amostras estratificadas
+library('TeachingSampling')
+```
+
+Gerando amostra estratificada 
+```{r}
+amostrairis2 = strata(data = iris, stratanames = c('Species'), size = c(2,3,5), method = 'srswor')
+amostrairis2
+summary(amostrairis2)
+```
+
+Amostra Sistemática
+```{r}
+# a cada n elementos extraimos 1. Geramos um número aleatório, por exemplo 5 e a partir do quinto geramos números sistematicamente de n em n. Se n fosse 10: 5, 15, 25, 35, ...
+```
+
+
+Medidas de centralidade e variabilidade
+```{r}
+jogadores = c(40000, 18000, 12000, 250000, 30000, 140000, 300000, 40000, 800000)
+mean(jogadores)                # média
+median(jogadores)              # mediana 
+quartis = quantile(jogadores)  # quartis
+quartis
+sd(jogadores)                  # desvio padrão
+summary(jogadores)
+```
+
+Teorema Central do Limite
+```{r}
+# mesmo que determinadas variáveis aleatórias não sejam normalmente distribuidas, a médias dessas variáveis será 
+library('semTools')
+z = c()
+for (i in 1:500){
+  m = mvrnonnorm(1000, c(1,2), matrix(c(10, 2, 2, 5), 2, 2), skewness = c(5,2), kurtosis = c(3, 3))
+  
+  z[i] = mean(m) # x recebe a média e portanto seguirá uma distribuição normal
+}
+hist(m)
+hist(z, breaks = 10)
+```
+
+
+Teste de normalidade
+Gráfico QQ
+```{r}
+set.seed(123)
+x = mvrnonnorm(1000, c(1,2), matrix(c(10, 2, 2, 5), 2, 2), skewness = c(5,2), kurtosis = c(3, 3)) # gerando dados que não estão normalmente distribuidos
+
+# x = rnorm(1000) # gera dados normalmente distribuidos
+hist(x)
+qqnorm(x)       # gráfico de distribuição normal
+qqline(x)
+```
+
+
+Teste de Shapiro
+Valor de p acima de 0,05, não há indício para não confirmar a hipótese nula de dados normalmente distribuidos
+```{r}
+shapiro.test(x) # se p > 0,05 os dados estão normalmente distribuidos 
+```
+
+Histograma com linha de densidade 
+```{r}
+hist(x, main = '')
+par(new = TRUE)   # serve para gerar os gráficos juntos
+plot(density(x), main = '', ylab = '', xlab = '', axes = F, lwd=2.5)
+```
+
+
+Distribuição t student
+Salario de cientistas: 75 por hora. Amostra 9. s = 10. Qual a probabilidade de ser menor que 80 horas ?
+t = 1.5 graus de liberdade 
+```{r}
+pt(1.5, 8)
+pt(1.5, 8, lower.tail = F)
+1 - pt(1.5, 8)
+pt(1.5, 8) + pt(1.5, 8, lower.tail = F)
+```
+
+
+Distribuição binomial
+```{r}
+
+dbinom(x = 3, size = 4, prob = 0.25)      # probabilidade pontual
+pbinom(q = 4, size = 4, prob = 0.25)      # probabilidade acomulada 
+```
+
+
+Distribuição de Poisson
+```{r}
+dpois(3, lambda = 2)    # probabilidade pontual
+ppois(3, lambda = 2)    # acumulativa
+ppois(3, lambda = 2, lower.tail = F)
+```
+
+
+Qui-quadrado
+```{r}
+novela = matrix(c(19,6,43,32), nrow = 2, byrow = 1)
+rownames(novela) = c("Masculino", "Feminino")
+colnames(novela) = c("Assiste", "nãoAssiste")
+novela
+```
+Executando o quiquadrado
+Valor de p é maior que 0,05 não há evidências de diferença significativa (hipotese nula)
+ou seja, não há diferença significativa entre a proporção de homens e mulheres que assisti novela
+```{r}
+chisq.test(novela)
+
+```
+
+
+Anova
+```{r}
+tratamento = read.csv("/home/mack/Documents/code/data_science/arquivos_do_curso/18.Pr tica em R/dados/anova.csv", sep = ";")
+tratamento
+```
+
+```{r}
+boxplot(tratamento$Horas ~ tratamento$Remedio)
+```
+Executamos análise de variância
+observar valor de p maior que 0,05 (pr(>F))
+Hipotese nula de que não há diferença significativa
+```{r}
+an = aov(Horas ~ Remedio, data = tratamento)
+summary(an)
+```
+
+```{r}
+an = aov(Horas ~ Remedio*Sexo, data = tratamento)
+summary(an)
+```
+Se houver diferença o teste de Tukey é executado 
+```{r}
+Tukey = TukeyHSD(an)
+Tukey
+```
+
+```{r}
+plot(Tukey)
+```
+

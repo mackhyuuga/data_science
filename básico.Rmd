@@ -1,0 +1,238 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Types 
+```{r}
+# comments are made using hash 
+
+msg          <- "olá mundo"      # caracter/string
+bool         <- TRUE             # buleano 
+numero       <- 2                # nameric
+numInt       <- 2L               # integer 
+numComplex   <- 2 + 5i           # número complexo
+stringRaw    <- charToRaw(msg)   # bit do caracter 
+
+print(stringRaw)
+
+```
+
+Comparation
+```{r}
+>=
+<=
+==
+!=
+```
+
+Relational operations
+```{r}
+&  # e
+|  # ou
+!  # negação
+```
+
+Operator
+```{r}
+vector1 = 1 : 10
+vector2 = 11 : 20
+vector1 + vector2
+print(1 %in% vector1)  # 1 esta em vector1 ?
+
+m <- matrix(c(2, 4, 5, 6), nrow = 2, ncol = 2, byrow = TRUE) #matrix 
+t(m) #transposta de m
+```
+
+
+Conditional structure
+```{r}
+x = '10'
+if (is.integer(x)){
+  print(x)
+} else{
+  msg = paste(class(x), x, 'não é um inteiro', sep = ' ') # concatena string com número
+  print(msg)
+}
+
+y = 3
+posicao = switch(y, 'a', 'b', 'c', 'd') # te dá a posição 
+print(posicao)
+```
+
+Repetition structure
+```{r}
+i = 0
+
+while (i < 10){
+  if (i == 3){
+    i = i + 1 
+    next  # faz com que ele pule essa vez no loop
+  }
+  print(i)
+  i = i + 1 
+  
+}
+ 
+vector = c(1, 3, 'oi', TRUE)
+for (i in vector) {
+  print(i)
+}
+
+i = 0
+repeat { # é um loop infinito que precisa de um comando break para ser quebrado 
+  print(i)
+  i = i + 1
+  if (i > 10){
+    break
+  }
+}
+
+```
+
+
+
+Function
+```{r}
+show = function(msg){
+  m = paste('mensagem', msg, sep = ': ')
+  return(m)
+}
+print(show('ola'))
+
+soma = function(..., condition = TRUE){ # os três pontos nos permite passar quantos parametros quisermos 
+  s = 0
+  vetor = c(...)
+  if (condition){
+    for (valor in vetor){
+    s = s + valor
+  }
+  return(s)
+  }
+  }
+
+print(soma(1, 2, condition = TRUE, 3, 4, 5)) # temos n varias que cairam em (...) e uma que está sendo especificada pela palavra condition
+```
+
+
+String
+```{r}
+x = "olá"
+y = "mundo"
+print(paste(x, y, 2021, sep = " "))
+print(nchar(y))
+print(toupper(x))
+print(substring(y, 2, 4))
+format('allison', width = 20, justify = 'c')
+```
+
+
+Vector
+```{r}
+v1 = seq(0, 10, by = 2)   # um vetor formado pela sequencia com intervalos de 2 em 2
+print(v1)
+v1[c(2,3,4)]
+v1[c(-3,-4)]  # estamos tirando os números correspondentes as posições 3 e 4
+v1[c(TRUE, TRUE, FALSE)] # quais valores irão aparecer 
+print(sort(v1, decreasing = TRUE))
+```
+
+
+Lista
+```{r}
+vector = c(1, 2, 4:7)   #vetor é unidimensional 
+lista = list(1, 2, 4:7)
+vector
+lista
+lista[[3]][[1]]   # comumente usamos dois para '[]' listas e um para vetor
+unlist(lista)     # o comando 'unlist' transforma uma lista num vetor
+```
+
+
+
+Matrix
+```{r}
+linha = c('l1', 'l2', 'l3')
+coluna = c('c1', 'c2', 'c3')
+m = matrix(data = seq(0, 16, by = 2), nrow = 3, ncol = 3, byrow = TRUE, dimnames = list(linha, coluna))
+m
+m + t(m)  # a multiplicação de duas matrizes não é simplismente m*m, isso retornaria uma matriz cujos elementos são eles mesmos ao quadrado
+```
+
+
+Arrai
+```{r}
+linha = c('l1', 'l2', 'l3')
+coluna = c('c1', 'c2', 'c3')
+matriz = c('m1', 'm2')
+v1 = c(1, 2, 3)
+v2 = 5:11
+r1 <- array(v1, dim = c(5)) # uma linha, tal qual um vetor
+r1
+r2 <- array(v2, dim = c(5, 5)) # uma linha e uma coluna, tal qual uma matriz
+r2
+resultado <- array(c(v1, v2), dim = c(3, 3, 2), dimnames = list(linha, coluna, matriz)) # v1 e v2 são os vetores que irão compor o array que terá dimensão (3,3,2)
+resultado            # isto é, 3 linhas, 3 colunas e duas matrizes.
+resultado[,,2]       # acessando a matriz 2
+resultado[2, 3, 2]   # acessando um elemento
+
+r = apply(resultado, c(1), sum) # somou a as linha da primeira matriz com as da segunda 
+r                               # e terceira matriz
+```
+
+
+Factor 
+```{r}
+# fatores são objetos usados para categorizar dados
+d = c('a', 'b', 'a', 'c', 'b', 'c', 'a')
+fator = factor(d)
+fator
+f = gl(3, 4, labels = c('a', 'b', 'c')) # essa função gera níveis de fatores 
+f
+```
+
+
+
+Data frame
+```{r}
+dados = data.frame(
+  id = c(1:3),
+  nome = c("allison", "eduardo", "sousa"),
+  stringsAsFactors = FALSE
+)
+dados
+str(dados)
+summary(dados)
+dados[2, 'nome'] # acessando linha 2 colina 'nome' (poderia usar 2 também)
+dados[4, 1] = 4
+dados[4, 2] = 'bonfim' # só foi possível introduzir por que essa coluna não é um factor
+dados$letras = c('a', 'a', 'c', 'd') #adicionando nova coluna 
+dados
+
+f2 = data.frame(
+  id = c(5),
+  nome = c('mack'),
+  letras = c('a'),
+  stringsAsFactors = FALSE
+)
+
+soma = rbind(dados, f2)
+soma
+
+filtro = subset(soma, letras == 'a' & id < 4) # subset filtra os elementos das linhas
+filtro
+```
+
+
+
+Diretorio
+```{r}
+getwd()  # apresendo onde está o diretório 
+dir()    # apresendo os arquivos do diretório 
+setwd('/home/mack/Documents/code/') # serve para entrar numa pasta
+```
+
+
+
+
+

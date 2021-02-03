@@ -1,0 +1,43 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+Fatores podem ser vistos como vetores que possuem rótulos (levels).
+```{r}
+rm(list = ls())
+library(dplyr)
+library(ggplot2)
+dados = read.csv('/home/mack/Documents/code/data_science/arquivos_do_curso/9.Pr tica em R/dados/tempo.csv', header= F, skip = 0, sep = ';', na.strings = '', dec = '.', stringsAsFactors = T)
+head(dados)
+summary(dados)
+dim(dados)
+select(dados, X0, X1)
+filter(dados, X0 <= 6)
+col2 <- dados$X2
+as.numeric(col2)
+as.character(col2)
+dados = mutate(dados, X0 = 10*X0)
+```
+
+tratando Aparencia
+```{r}
+dados[dados$Aparencia == 'menos',]$Aparencia = 'nublado'
+```
+
+tratando temperatura
+```{r}
+dados[dados$Temperatura > 130 | dados$Temperatura < -130,]$Temperatura = median(dados$Temperatura)
+```
+
+tratando umidade
+```{r}
+dados[is.na(dados$Umidade) | dados$Umidade > 100,]$Umidade = median(dados$Umidade, na.rm = T)
+```
+
+tratando vento
+```{r}
+dados[is.na(dados$Vento) | dados$Jogar == "sim",]$Vento = "VERDADEIRO"
+```
+
